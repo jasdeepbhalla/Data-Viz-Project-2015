@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?1.29.1"></script>
+    
+
+        <style type="text/css">
+       html, body, #map {
+           width: 95%;
+  height: 90%;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+ padding: 0;
+       }
+       path {
+           fill: none;
+           stroke: black;
+           stroke-width: 5px;
+       }
+       .markers {
+           position: absolute;
+       }
+       svg.pts {
+           position: absolute;
+       }
+       .markers border {
+           position: absolute;
+           stroke: black;
+           stroke-width: 2px;
+       }
+
+
+       .markers svg.pts {
+           width: 1060px;
+           height: 1020px;
+           padding-right: 0px;
+           font: 16px sans-serif;
+            font-weight: bold;
+       }
+       .markers circle {
+           fill: brown;
+           stroke: black;
+           stroke-width: 1.5px;
+       }
+       .SvgOverlay path {
+           stroke: Orange;
+           stroke-width: 8px;
+           fill: Orange;
+           fill-opacity: 3.3;
+       }
+       .geojson {
+           fill: none;
+           stroke: red;
+           stroke-width: 5;
+       }
+
+
+        </style>
+    </head>
+    
+    <body>
+        <div id="map"></div>
+    
+		<script>
+var map = new google.maps.Map(d3.select("#map").node(), {
+    zoom: 12,
+    center: new google.maps.LatLng(33.459953, -112.074982),
+
+
+    //center: new google.maps.LatLng(29.371397, -81.54938), //N/S E/W
+    //mapTypeId: google.maps.MapTypeId.ROADMAP
+});
+
+
+var data = [{
+    name: "Domino's Pizza",
+    lng: -112.0734183,
+    lat: 33.4795416
+}, {
+    name: "Viad Tower Restaurants",
+    lng: -112.044315,
+    lat: 33.468988
+}, {
+    name: "Palazzo",
+    lng: -112.094725,
+    lat: 33.456068
+}, {
+    name: "Phoenix Produce Company",
+    lng: -112.0737871,
+    lat: 33.4424729
+}, {
+    name: "Hooters",
+    lng: -112.0691194,
+    lat: 33.4526031
+}, {
+    name: "St Mary's Corner",
+    lng: -112.1099872,
+    lat: 33.4506843
+}];
+// }, {
+//     name: "pt7",
+//     lng: -81.59230268,
+//     lat: 29.359308171
+// }, {
+//     name: "pt8",
+//     lng: -81.58783883,
+//     lat: 29.356449048
+// }, {
+//     name: "pt9",
+//     lng: -81.58189168,
+//     lat: 29.420264027
+// }, {
+//     name: "pt10",
+//     lng: -81.58288,
+//     lat: 29.4202
+// }, {
+//     name: "pt11",
+//     lng: -81.56079477,
+//     lat: 29.359527893
+// }, {
+//     name: "pt12",
+//     lng: -81.55861145,
+//     lat: 29.356670068
+// }, {
+//     name: "pt13",
+//     lng: -81.57961314,
+//     lat: 29.420893275
+// }, {
+//     name: "pt14",
+//     lng: -81.579302,
+//     lat: 29.419368
+// }, {
+//     name: "pt15",
+//     lng: -81.55979967,
+//     lat: 29.359768002
+// }, {
+//     name: "pt16",
+//     lng: -81.55823261,
+//     lat: 29.36122515
+// }, {
+//     name: "pt17",
+//     lng: -81.58189168,
+//     lat: 29.420264027
+// }, {
+//     name: "pt18",
+//     lng: -81.57997524,
+//     lat: 29.421120323
+// }, {
+//     name: "pt19",
+//     lng: -81.58148399,
+//     lat: 29.420030491
+// }, {
+//     name: "pt20",
+//     lng: -81.57839075,
+//     lat: 29.420766158
+// }, {
+//     name: "pt21",
+//     lng: -81.57982489,
+//     lat: 29.42002304
+// }, {
+//     name: "pt22",
+//     lng: -81.580266,
+//     lat: 29.420212
+// }, {
+//     name: "pt23",
+//     lng: -81.5820392,
+//     lat: 29.42048164
+// }, {
+//     name: "pt24",
+//     lng: -81.57894731,
+//     lat: 29.420509033
+// }, {
+//     name: "pt25",
+//     lng: -81.57819629,
+//     lat: 29.418834169
+// }];
+
+
+
+var overlay = new google.maps.OverlayView();
+
+var projection;
+
+function _projection(lat, lng) {
+    e = new google.maps.LatLng(lat, lng);
+    e = projection.fromLatLngToDivPixel(e);
+    return [e.x, e.y]
+    // return [ e.x, e.y ]
+}
+overlay.onAdd = function () {
+    var layer = d3.select(this.getPanes().overlayLayer).append("div")
+        .attr("height", "100%")
+        .attr("width", "100%")
+        .attr("class", "markers")
+        .attr("id", "layer")
+
+    layer.node().style.width = "1366px";
+    layer.node().parentNode.style.width = "100%";
+    layer.node().parentNode.style.height = "100%";
+    layer.node().parentNode.parentNode.style.width = "100%";
+    layer.node().parentNode.parentNode.style.height = "100%";
+    layer.node().parentNode.parentNode.parentNode.style.width = "100%";
+    layer.node().parentNode.parentNode.parentNode.style.height = "100%";
+    layer.node().parentNode.parentNode.parentNode.parentNode.style.width = "100%";
+    layer.node().parentNode.parentNode.parentNode.parentNode.style.height = "100%";
+
+
+    var svg = layer.append('svg')
+        .attr('x', 0)
+        .attr('y', 0)
+
+
+
+    var padding = 10;
+
+    var lineFn = d3.svg.line()
+        .x(function (d) {
+        e = _projection(d.lat, d.lng);
+        return e[0] + padding
+    })
+        .y(function (d) {
+        e = _projection(d.lat, d.lng);
+        return e[1] + padding
+    })
+
+
+
+
+    // Add points
+    overlay.draw = function () {
+
+        var boundingRect = layer.node().getBoundingClientRect()
+        svg.attr('width', boundingRect.width)
+            .attr('height', boundingRect.height)
+        projection = this.getProjection()
+
+        var points = svg.selectAll('.point-container').data(data)
+        points.enter().append('g')
+            .each(function (d) {
+            var point = d3.select(this)
+           
+            point.append("svg:circle")
+                .attr("r", 10.5)
+                .attr("cx", padding)
+                .attr("cy", padding)
+                .attr("class", "point pts")
+                 .on("click",function(){alert("Hello");})
+            
+            point.append("svg:text")
+                .attr("x", padding + 19)
+                .attr("y", padding)
+                .attr("dy", ".31em")
+                .style("font-size","14px")
+                .style("font-weight", "bold")
+                .text(function (d) {
+                return d.name;
+            })
+                 .on("click",function(){alert("Hello");});
+
+        })
+        points.attr('transform', transform)
+            .attr('class', 'point-container')
+
+
+        var line = svg.selectAll('.path').data([data])
+        line.enter().append('path')
+        line.attr('class', 'path')
+            .attr('d', lineFn)
+
+            function transform(d) {
+                e = _projection(d.lat, d.lng)
+                return "translate(" + e[0] + ", " + e[1] + ")"
+            }
+
+
+    };
+};
+
+// Bind overlay to the map…
+overlay.setMap(map);
+
+
+		</script>
+
+
+
+    </body>
+
+</html>

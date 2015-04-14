@@ -1,0 +1,19 @@
+{"directed": true, "graph": [], "nodes": [
+{"lat": 33.4795416, "lng": -112.0734183, "id": "Domino's Pizza"}, 
+{"lat": 33.468988, "lng": -112.044315, "id": "Viad Tower Restaurants"}, 
+{"lat": 33.456068, "lng": -112.094725, "id": "Palazzo"}, 
+{"lat": 33.4424729, "lng": -112.0737871, "id": "Phoenix Produce Company"}, 
+{"lat": 33.4526031, "lng": -112.0691194, "id": "Hooters"}, 
+{"lat": 33.4506843, "lng": -112.1099872, "id": "St Mary's Church"}], 
+"links": [
+{"source": 1, "target": 2}, 
+{"source": 1, "target": 3}, 
+{"source": 3, "target": 4}, 
+{"source": 3, "target": 6}, 
+{"source": 4, "target": 5}, 
+{"source": 4, "target": 1}, 
+{"source": 5, "target": 6}, 
+{"source": 5, "target": 2}, 
+{"source": 6, "target": 4}, 
+{"source": 6, "target": 3}], 
+"multigraph": false, "start":10,"end":50}
